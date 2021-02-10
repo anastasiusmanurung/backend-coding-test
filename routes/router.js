@@ -2,18 +2,30 @@ const mongoose = require('mongoose');
 const userData = mongoose.model('user-data');
 const commonConstants = require('../common-constants/common-constants');
 module.exports = app => {
-  app.get('/api/userdata', async (req, res) => {
-    const userdata = await userData.find({accountNumber:'anas'}).cache({ expire: 10 });
+
+  //All Data
+  app.get('/api/userdata/all', async (req, res) => {
+    const userdata = await userData.find().cache({ expire: 10 });
     res.json(userdata);
   });
-
-  app.get('/api/userdata', async (req, res) => {
+  //FingByAccountNumber
+  app.get('/api/userdata/byAccNumber', async (req, res) => {
+    const userdata = await userData.find({accountNumber:'Anas'}).cache({ expire: 10 });
+    res.json(userdata);
+  });
+  
+  app.get('/api/userdata/byIdenNumber', async (req, res) => {
     const userdata = await userData.findById.cache({ expire: 10 });
+    res.json(userdata);
+  });
+//FindByIdentityNumber
+  app.get('/api/userdata/byIdenNumber', async (req, res) => {
+    const userdata = await userData.find({identifyNumber:'08117236123'}).cache({ expire: 10 });
     res.json(userdata);
   });
 
   
-
+  //Post Data
   app.post('/api/userdata', async (req, res) => {
     const { userName, accountNumber,emailAddress , identifyNumber } = req.body;
 
@@ -41,4 +53,7 @@ module.exports = app => {
       await user.save();
       res.send(user);
     } catch (err) {
-      res.status(400).send(err.messa
+      res.status(400).send(err.message);
+    }
+  });
+};
